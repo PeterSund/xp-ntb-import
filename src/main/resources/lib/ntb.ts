@@ -2,14 +2,28 @@ import { request, HttpResponse } from "/lib/http-client";
 
 const URL_NTB = "https://kommunikasjon.ntb.no/json/v2/releases";
 
-export function getPressReleases(params: GetPressReleaseParams): Array<PressRelease> {
+export function getPressReleases(params: GetPressReleaseParams, fetchAllPressReleases: boolean): Array<PressRelease> {
   const res: HttpResponse = request({
     url: URL_NTB,
     params: params as Record<string, string>,
   });
 
+  let pressReleases: PressRelease[] = [];
+
   if (res.status === 200) {
-    return (JSON.parse(res.body ?? "") as NtbResponse).releases;
+    pressReleases = pressReleases.concat((JSON.parse(res.body ?? "") as NtbResponse).releases);
+
+    if (fetchAllPressReleases && (JSON.parse(res.body ?? "") as NtbResponse).nextPage != null) {
+      pressReleases = pressReleases.concat(getPressReleases(
+      {
+        publisher: params.publisher,
+        channels: params.channels,
+        page: (JSON.parse(res.body ?? "") as NtbResponse).nextPage
+      }, 
+      fetchAllPressReleases = true));
+    }
+
+  return pressReleases;
   } else {
     log.error("Failed to get press releases from NTB over HTTP");
     throw {

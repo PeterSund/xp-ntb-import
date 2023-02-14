@@ -14,4 +14,9 @@ export interface SiteConfig {
    * Channels
    */
   channels?: string;
+
+  /**
+   * Fetch all articles
+   */
+  fetchAllPressReleases: boolean;
 }
