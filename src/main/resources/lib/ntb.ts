@@ -2,7 +2,7 @@ import { request, HttpResponse } from "/lib/http-client";
 
 const URL_NTB = "https://kommunikasjon.ntb.no/json/v2/releases";
 
-export function getPressReleases(params: GetPressReleaseParams, fetchAllPressReleases: boolean): Array<PressRelease> {
+export function getPressReleases(params: GetPressReleaseParams): Array<PressRelease> {
   const res: HttpResponse = request({
     url: URL_NTB,
     params: params as Record<string, string>,
@@ -11,16 +11,18 @@ export function getPressReleases(params: GetPressReleaseParams, fetchAllPressRel
   let pressReleases: PressRelease[] = [];
 
   if (res.status === 200) {
-    pressReleases = pressReleases.concat((JSON.parse(res.body ?? "") as NtbResponse).releases);
+    const ntbResponse = JSON.parse(res.body ?? "") as NtbResponse;
+    pressReleases = pressReleases.concat(ntbResponse.releases);
 
-    if (fetchAllPressReleases && (JSON.parse(res.body ?? "") as NtbResponse).nextPage != null) {
+    if (params.fetchAllPressReleases && (JSON.parse(res.body ?? "") as NtbResponse).nextPage != null) {
       pressReleases = pressReleases.concat(getPressReleases(
       {
         publisher: params.publisher,
         channels: params.channels,
-        page: (JSON.parse(res.body ?? "") as NtbResponse).nextPage
+        page: ntbResponse.nextPage,
+        fetchAllPressReleases: params.fetchAllPressReleases,
       }, 
-      fetchAllPressReleases = true));
+      ));
     }
 
   return pressReleases;
@@ -41,6 +43,7 @@ interface GetPressReleaseParams {
   search?: string;
   channels?: string;
   filters?: string;
+  fetchAllPressReleases?: boolean;
 }
 
 interface NtbResponse {

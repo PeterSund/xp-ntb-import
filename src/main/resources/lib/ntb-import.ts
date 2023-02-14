@@ -15,8 +15,8 @@ export function importFromNtb(): void {
   const pressReleases = getPressReleases({
     publisher: params.publisher,
     channels: params.channels,
-    //size: 5,
-  }, params.fetchAllPressReleases);
+    fetchAllPressReleases: params.fetchAllPressReleases,
+  });
 
   const createdContentIds = pressReleases
     .filter(notAlreadyImported)
