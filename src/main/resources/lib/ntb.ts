@@ -14,7 +14,7 @@ export function getPressReleases(params: GetPressReleaseParams): Array<PressRele
     const ntbResponse = JSON.parse(res.body ?? "") as NtbResponse;
     pressReleases = pressReleases.concat(ntbResponse.releases);
 
-    if (params.fetchAllPressReleases && (JSON.parse(res.body ?? "") as NtbResponse).nextPage != null) {
+    if (params.fetchAllPressReleases && ntbResponse.nextPage != null) {
       pressReleases = pressReleases.concat(getPressReleases(
       {
         publisher: params.publisher,
