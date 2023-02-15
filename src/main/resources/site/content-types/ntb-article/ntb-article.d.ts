@@ -73,7 +73,7 @@ export interface NtbArticle {
   /**
    * NTB channel id
    */
-  channelId?: number;
+  channelId: number;
 
   /**
    * Language

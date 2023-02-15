@@ -140,7 +140,7 @@ function pressReleaseToNtbArticle(pressRelease: PressRelease): NtbArticle {
     published: pressRelease.published,
     url: `https://kommunikasjon.ntb.no${pressRelease.url}`,
     publisherId: pressRelease.publisher.id,
-    channelId: pressRelease.channels.length > 0 ? pressRelease.channels[0].id : undefined,
+    channelId: pressRelease.channels[0].id,
     type: pressRelease.type,
     language: pressRelease.language,
   };
