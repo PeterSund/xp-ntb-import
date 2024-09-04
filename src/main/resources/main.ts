@@ -12,7 +12,7 @@ export const context: CronRunContext = {
     login: "su",
     userStore: "system",
   },
-  repository: get()?.repository ?? 'com.enonic.cms.default',
+  repository: 'com.enonic.cms.entra-nettside',
 };
 
 cronLib.schedule({
