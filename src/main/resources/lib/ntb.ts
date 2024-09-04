@@ -8,8 +8,24 @@ export function getPressReleases(params: GetPressReleaseParams): Array<PressRele
     params: params as Record<string, string>,
   });
 
+  let pressReleases: PressRelease[] = [];
+
   if (res.status === 200) {
-    return (JSON.parse(res.body ?? "") as NtbResponse).releases;
+    const ntbResponse = JSON.parse(res.body ?? "") as NtbResponse;
+    pressReleases = pressReleases.concat(ntbResponse.releases);
+
+    if (params.fetchAllPressReleases && ntbResponse.nextPage != null) {
+      pressReleases = pressReleases.concat(getPressReleases(
+      {
+        publisher: params.publisher,
+        channels: params.channels,
+        page: ntbResponse.nextPage,
+        fetchAllPressReleases: params.fetchAllPressReleases,
+      }, 
+      ));
+    }
+
+  return pressReleases;
   } else {
     log.error("Failed to get press releases from NTB over HTTP");
     throw {
@@ -27,6 +43,7 @@ interface GetPressReleaseParams {
   search?: string;
   channels?: string;
   filters?: string;
+  fetchAllPressReleases?: boolean;
 }
 
 interface NtbResponse {

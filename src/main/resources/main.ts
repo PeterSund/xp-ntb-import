@@ -1,6 +1,7 @@
 import { CronRunContext } from "/lib/cron";
 import * as cronLib from "/lib/cron";
 import { importFromNtb } from "./lib/ntb-import";
+import { get } from "/lib/xp/context";
 
 const CRON_EVERY_HOUR = "0 * * * *";
 
@@ -11,7 +12,7 @@ export const context: CronRunContext = {
     login: "su",
     userStore: "system",
   },
-  repository: "com.enonic.cms.default",
+  repository: 'com.enonic.cms.entra-nettside',
 };
 
 cronLib.schedule({

@@ -23,5 +23,14 @@
         <max-length>8</max-length>
       </config>
     </input>
+
+    <input name="fetchAllPressReleases" type="CheckBox">
+      <label i18n="site.fetchAllPressReleases">Fetch all articles</label>
+      <occurrences minimum="0" maximum="1"/>
+      <help-text i18n="site.fetchAllPressReleases.helptext">Toggle to fetch all articles. Will fetch all articles every hour, so make sure you actually need it before checking it.</help-text>
+      <config>
+        <alignment>left</alignment>
+      </config>
+    </input>
   </form>
 </site>

@@ -17,11 +17,12 @@ Install this application from Enonic Market.
 
 ### Configuration
 
-When you add the NTB Import application to your *site*, you have to configure three fields.
+When you add the NTB Import application to your *site*, you have to configure four fields.
 
  1. Folder where articles are stored
  2. Publisher id (8 digit number from NTB)
  3. Channels (8 digit number from NTB)
+ 4. Fetch all articles (Will fetch all articles every hour, so make sure you actually need it before checking it)
 
 ### Manual Article Import
 

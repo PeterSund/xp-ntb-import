@@ -15,7 +15,7 @@ export function importFromNtb(): void {
   const pressReleases = getPressReleases({
     publisher: params.publisher,
     channels: params.channels,
-    //size: 5,
+    fetchAllPressReleases: params.fetchAllPressReleases,
   });
 
   const createdContentIds = pressReleases
@@ -23,7 +23,7 @@ export function importFromNtb(): void {
     .map((pressRelease) => importPressRelease(pressRelease, parentPath))
     .filter(notNullOrUndefined);
 
-  log.info(`Created ${createdContentIds.length} articles by importing form NTB`);
+  log.info(`Created ${createdContentIds.length} articles by importing from NTB`);
 
   const publishResults = publish({
     keys: createdContentIds,
@@ -70,6 +70,10 @@ function importPressRelease(pressRelease: PressRelease, parentPath: string) {
       editor: (content) => {
         content.data.imageId = imageContent?._id;
         content.data.images = imageIds;
+        content.workflow = {
+          state: "READY",
+          checks: {}
+        };
         return content;
       },
     })._id;
@@ -136,7 +140,7 @@ function pressReleaseToNtbArticle(pressRelease: PressRelease): NtbArticle {
     published: pressRelease.published,
     url: `https://kommunikasjon.ntb.no${pressRelease.url}`,
     publisherId: pressRelease.publisher.id,
-    channelId: pressRelease.channels[0].id,
+    channelId: pressRelease.channels.length > 0 ? pressRelease.channels[0].id : undefined,
     type: pressRelease.type,
     language: pressRelease.language,
   };
